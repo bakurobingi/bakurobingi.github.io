@@ -11,10 +11,10 @@ html,body{
   font-size:14px; line-height:1.6; color:var(--text-color);
   background:var(--bg-color) url("assets/bg.jpg") no-repeat center/cover fixed;
 }
-h1{font-size:22px;font-weight:700;}
+h1{font-size:20px;font-weight:700;}
 h2{font-size:18px;font-weight:700;color:var(--main-color);}
 h3{font-size:16px;}
-p,li,a{font-size:14px;}
+p,li,a{font-size:12px;}
 
 /* —— 通用容器与按钮 —— */
 .container{
@@ -26,11 +26,25 @@ p,li,a{font-size:14px;}
 .back-home a:hover{text-decoration:underline;}
 .links a{color:var(--main-color);font-weight:700;text-decoration:none;margin:0 5px;}
 .links a:hover{text-decoration:underline;}
-.section{
-  display:inline-block;padding:15px 40px;border:2px solid var(--main-color);border-radius:16px;
-  font-size:20px;font-weight:700;color:var(--text-color);background:#fff;text-decoration:none;transition:.3s;
+.section {
+  display:inline-block;
+  padding:15px 40px;
+  border:2px solid var(--main-color);
+  border-radius:16px;
+
+  font-size:12px;              /* 改小字体 */
+  font-weight:700;
+  color:var(--main-color);     /* 字体颜色改成和边框一致 */
+  background:#fff;
+  text-decoration:none;
+  transition:.3s;
 }
-.section:hover{background:var(--main-color);color:#fff;}
+
+.section:hover {
+  background:var(--main-color);
+  color:#fff;                  /* 悬停时仍然反转成白字 */
+}
+
 
 /* —— 首页 —— */
 .avatar{width:120px;height:120px;border-radius:50%;border:3px solid var(--main-color);margin-bottom:15px;}
@@ -66,7 +80,7 @@ p,li,a{font-size:14px;}
   display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0 16px;
 }
 .filter-btn{
-  padding:6px 12px;border:1px solid rgba(0,0,0,.1);background:#fff;border-radius:999px;
+  padding:6px 12px;border:1px solid rgba(0,0,0,.1);background:#fff;border-ra dius:999px;
   cursor:pointer;font-size:13px;
 }
 .filter-btn.active{
