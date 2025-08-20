@@ -126,3 +126,58 @@ p,li,a { font-size:inherit;}
 .lightbox-btn.prev{left:20px;}
 .lightbox-btn.next{right:20px;}
 #lightbox-caption{margin-top:10px;color:#fff;font-size:14px;text-align:center;}
+
+/* —— Diary 统一样式罩子 —— */
+.diary-content {
+  font-family: inherit;            /* 跟站点一致 */
+  font-size: 20px;                 /* 统一字号 */
+  line-height: 1.8;                /* 舒适行距 */
+  color: var(--text-color);
+}
+
+/* 清掉粘贴进来的乱七八糟字号/字体（含行内） */
+.diary-content, .diary-content * {
+  font-size: 20px !important;      /* 锁死正文字号 */
+  font-family: inherit !important; /* 不用花里胡哨字体 */
+}
+
+/* 但仍然保留标题的层级感（相对正文稍大/稍小） */
+.diary-content h1 { font-size: 28px !important; line-height: 1.5; }
+.diary-content h2 { font-size: 24px !important; line-height: 1.6; }
+.diary-content h3 { font-size: 22px !important; line-height: 1.7; }
+.diary-content h4, 
+.diary-content h5, 
+.diary-content h6 { font-size: 20px !important; line-height: 1.8; }
+
+/* 段落/列表的间距统一 */
+.diary-content p,
+.diary-content li { margin: 0.6em 0; }
+
+/* 链接、引用、代码块 */
+.diary-content a { color: var(--main-color); text-decoration: underline; }
+.diary-content blockquote {
+  margin: 1em 0; padding: .6em 1em;
+  border-left: 4px solid var(--main-color);
+  background: rgba(140,132,217,.06);
+}
+.diary-content pre, 
+.diary-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 16px !important;
+}
+
+/* 图片/表格不破框（你之前已加，留在这里以防覆盖） */
+.diary-content img,
+.diary-content video,
+.diary-content canvas {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin: 12px auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.diary-content table { max-width: 100%; overflow-x: auto; display: block; }
+
+/* 防止 p, li, a 被全局别处“缩小” */
+p, li, a { font-size: inherit; }

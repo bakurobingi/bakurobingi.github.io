@@ -149,9 +149,30 @@ function initDiary() {
 function loadDiary(filename) {
   const content = document.getElementById("diary-content");
   if (!content) return;
+
   fetch(`assets/diary/${filename}`)
     .then(res => { if (!res.ok) throw new Error("not found"); return res.text(); })
-    .then(html => content.innerHTML = html)
+    .then(html => {
+      // 1) 先放进容器
+      content.innerHTML = html;
+
+      // 2) 清理：移除内联样式 & font 标签，避免污染
+      const scope = content; // 只处理日记区域
+      // 移除 style 属性
+      scope.querySelectorAll("[style]").forEach(el => el.removeAttribute("style"));
+      // 移除 <font> 这类过时标签（保留内容）
+      scope.querySelectorAll("font").forEach(el => {
+        const parent = el.parentNode;
+        while (el.firstChild) parent.insertBefore(el.firstChild, el);
+        parent.removeChild(el);
+      });
+      // 可选：把 H1 降级成 H2，层级更稳
+      scope.querySelectorAll("h1").forEach(h1 => {
+        const h2 = document.createElement("h2");
+        h2.innerHTML = h1.innerHTML;
+        h1.replaceWith(h2);
+      });
+    })
     .catch(() => content.innerHTML = "<p>暂无内容。</p>");
 }
 
