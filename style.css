@@ -181,3 +181,32 @@ p,li,a { font-size:inherit;}
 
 /* 防止 p, li, a 被全局别处“缩小” */
 p, li, a { font-size: inherit; }
+
+/* 1) 关闭移动端的自动字体放大（iOS/Safari/部分安卓） */
+html {
+  -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+}
+
+/* 2) 统一日记正文字号（无视粘贴进来的乱字号） */
+.diary-content,
+.diary-content * {
+  font-size: 20px !important;     /* 你要的 20px */
+  font-family: inherit !important;
+  line-height: 1.8 !important;
+}
+
+/* 3) 保留标题的层级（不想放大的可以删掉这块） */
+.diary-content h1 { font-size: 28px !important; line-height: 1.5 !important; }
+.diary-content h2 { font-size: 24px !important; line-height: 1.6 !important; }
+.diary-content h3 { font-size: 22px !important; line-height: 1.7 !important; }
+.diary-content h4, .diary-content h5, .diary-content h6 { font-size: 20px !important; line-height: 1.8 !important; }
+
+/* 4) 列表/段落的间距统一一下，视觉更稳 */
+.diary-content p,
+.diary-content li { margin: 0.6em 0; }
+
+/* 5) 兜底：别让全局把 p / li / a 强行改小 */
+p, li, a { font-size: inherit; }
+
