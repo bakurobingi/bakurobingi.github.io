@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>我的小画廊</title>
+  <style>
+    :root{
+      --card-bg: rgba(255,255,255,.85);
+      --card-blur: 10px;
+      --border: #dddddd;
+      --ink: #2b2b35;
+      --muted: #666;
+      --accent: #6f66d9;
+      --chip-bg: #f0f1f8;
+      --chip-br: #d9dbea;
+      --chip-tx: #50536b;
+      --chip-act-bg: #e8e9fb;
+      --chip-act-tx: #3b3f8f;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:url("你的背景图URL") no-repeat center/cover fixed;
+      min-height:100vh; display:flex; justify-content:center; align-items:center;
+      color:var(--ink);
+    }
+    .container{
+      display:flex; width:90%; max-width:1000px; min-height:80vh;
+      background:var(--card-bg); backdrop-filter:blur(var(--card-blur));
+      border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,.15); overflow:hidden;
+    }
+    /* 左栏：固定简介 + 固定目录 + 可滚动日记 */
+    .left{ width:35%; display:flex; flex-direction:column; border-right:1px solid var(--border); }
+    .profile{ padding:18px; text-align:center; border-bottom:1px solid var(--border); background:rgba(255,255,255,.6); backdrop-filter:blur(6px); }
+    .profile img{ width:84px; height:84px; border-radius:50%; object-fit:cover; border:3px solid #fff; box-shadow:0 0 10px rgba(0,0,0,.2); margin-bottom:8px; }
+    .profile h2{ margin:4px 0 2px; font-size:18px; }
+    .profile p{ margin:0 0 6px; font-size:13px; color:#444; }
+    .links a{ margin:0 6px; font-size:13px; color:#555; text-decoration:none; }
+    .links a:hover{ text-decoration:underline; }
+
+    .toc{ padding:12px 16px; border-bottom:1px solid var(--border); background:rgba(255,255,255,.55); backdrop-filter:blur(6px); }
+    .toc h3{ margin:0 0 8px; font-size:14px; color:#666; }
+    .toc a{ display:block; padding:6px 8px; border-radius:8px; color:#333; text-decoration:none; }
+    .toc a:hover, .toc a.active{ background:#ececff; color:#23244a; }
+    .tags{ display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+    .tagbtn{ padding:4px 10px; border:1px solid var(--chip-br); background:var(--chip-bg); color:var(--chip-tx); border-radius:999px; font-size:12px; cursor:pointer; }
+    .tagbtn.active{ background:var(--chip-act-bg); color:var(--chip-act-tx); border-color:#c9ccf4; }
+
+    .diary{ flex:1; overflow-y:auto; padding:18px; }
+    /* 折叠日记 */
+    .entry{ border:1px solid #eee; border-radius:10px; background:#fff; margin:0 0 12px; overflow:hidden; }
+    .entry summary{ list-style:none; cursor:pointer; padding:10px 12px; display:flex; flex-direction:column; gap:4px; }
+    .entry summary::-webkit-details-marker{ display:none; }
+    .entry .row{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
+    .entry h4{ margin:0; font-size:14px; }
+    .entry .meta{ color:#777; font-size:12px; }
+    .entry .preview{ color:#555; font-size:13px; }
+    .entry .chev{ transition:.2s; color:#888; font-size:12px; }
+    .entry[open] .chev{ transform:rotate(90deg); color:#333; }
+    .entry .content{ border-top:1px solid #f0f0f0; padding:10px 12px; font-size:14px; color:#333; background:#fff; }
+
+    /* 右栏：画廊 */
+    .right{ width:65%; padding:20px; }
+    .right h2{ margin:0 0 12px; color:var(--accent); }
+    .gallery{ display:grid; grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:10px; }
+    .gallery img{ width:100%; border-radius:8px; cursor:pointer; transition:transform .2s; }
+    .gallery img:hover{ transform:scale(1.05); }
+
+    /* 灯箱 */
+    .lightbox{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); z-index:99; justify-content:center; align-items:center; }
+    .lightbox img{ max-width:90%; max-height:90%; border-radius:10px; }
+
+    @media (max-width:900px){ .container{flex-direction:column; width:96%;} .left,.right{width:100%} .left{border-right:none; border-bottom:1px solid var(--border);} }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 左栏：简介 + 目录 + 折叠日记 -->
+    <aside class="left">
+      <div class="profile">
+        <img src="你的头像URL" alt="头像">
+        <h2>你的名字</h2>
+        <p>一句自我介绍：业余画师 / 练习记录 / 性癖自由。</p>
+        <div class="links">
+          <a href="https://twitter.com/你的账号" target="_blank">Twitter</a>
+          <a href="https://pixiv.net/users/你的ID" target="_blank">Pixiv</a>
+          <a href="mailto:you@example.com">Email</a>
+        </div>
+      </div>
+
+      <nav class="toc" id="toc">
+        <h3>目录</h3>
+        <a href="#d-2025-08-20">2025-08-20</a>
+        <a href="#d-2025-08-15">2025-08-15</a>
+        <a href="#d-2025-08-10">2025-08-10</a>
+        <h3 style="margin-top:12px;">标签</h3>
+        <div class="tags" id="tagbar">
+          <button class="tagbtn active" data-tag="*">全部</button>
+          <button class="tagbtn" data-tag="速写">速写</button>
+          <button class="tagbtn" data-tag="着衣">着衣</button>
+          <button class="tagbtn" data-tag="上色">上色</button>
+        </div>
+      </nav>
+
+      <div class="diary" id="diary">
+        <details class="entry" id="d-2025-08-20" data-tags="速写 着衣">
+          <summary>
+            <div class="row"><h4>2025-08-20</h4><span class="chev">▶</span></div>
+            <div class="meta">标签：速写 / 着衣</div>
+            <div class="preview">边缘粉光练习，重点是“贴合感”。（摘要一两句就好）</div>
+          </summary>
+          <div class="content">
+            <p>这里是全文：更详细的过程、参考、遇到的问题与解决办法……想写多长写多长。</p>
+          </div>
+        </details>
+
+        <details class="entry" id="d-2025-08-15" data-tags="上色">
+          <summary>
+            <div class="row"><h4>2025-08-15</h4><span class="chev">▶</span></div>
+            <div class="meta">标签：上色</div>
+            <div class="preview">减少二分法，尝试面分+反射光的小范围处理。</div>
+          </summary>
+          <div class="content">
+            <p>这里是全文……</p>
+          </div>
+        </details>
+
+        <details class="entry" id="d-2025-08-10" data-tags="速写">
+          <summary>
+            <div class="row"><h4>2025-08-10</h4><span class="chev">▶</span></div>
+            <div class="meta">标签：速写</div>
+            <div class="preview">快速人体结构草图，先形后线，允许任意线。</div>
+          </summary>
+          <div class="content">
+            <p>这里是全文……</p>
+          </div>
+        </details>
+      </div>
+    </aside>
+
+    <!-- 右栏：画廊（缩略图点击放大） -->
+    <main class="right">
+      <h2>画廊</h2>
+      <div class="gallery">
+        <!-- 把下面 src 换成你的图床缩略图。若想点击后显示原图，可在 JS 里扩展 data-full，也可直接把 src 填原图。 -->
+        <img src="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg" alt="图1">
+        <img src="https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg" alt="图2">
+        <img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg" alt="图3">
+      </div>
+    </main>
+  </div>
+
+  <!-- 灯箱 -->
+  <div class="lightbox" id="lightbox"><img src="" alt=""></div>
+
+  <script>
+    // 画廊 -> 点击放大
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = lightbox.querySelector('img');
+    document.querySelectorAll('.gallery img').forEach(img=>{
+      img.addEventListener('click',()=>{ lightbox.style.display='flex'; lbImg.src=img.getAttribute('data-full')||img.src; });
+    });
+    lightbox.addEventListener('click',()=> lightbox.style.display='none');
+
+    // 折叠：同一时间只展开一个（手风琴）
+    const entries = [...document.querySelectorAll('.entry')];
+    entries.forEach(e=>{
+      e.addEventListener('toggle', ()=>{ if(e.open){ entries.forEach(o=>{ if(o!==e) o.open=false; }); } });
+    });
+
+    // 目录高亮（优先展开项，否则按滚动位置）
+    const tocLinks = document.querySelectorAll('.toc a[href^="#"]');
+    const diary = document.getElementById('diary');
+    function highlightTOC(){
+      let activeId = entries.find(en=>en.open)?.id;
+      if(!activeId){ const y = diary.scrollTop + 40; entries.forEach(el=>{ if(el.offsetTop <= y) activeId = el.id; }); }
+      tocLinks.forEach(a=> a.classList.toggle('active', a.getAttribute('href')==='#'+activeId));
+    }
+    diary.addEventListener('scroll', highlightTOC, {passive:true});
+    entries.forEach(e=> e.addEventListener('toggle', highlightTOC));
+    highlightTOC();
+
+    // 点击目录：自动展开对应日记并滚动到可视
+    tocLinks.forEach(a=>{
+      a.addEventListener('click', (ev)=>{
+        const id = a.getAttribute('href').slice(1);
+        const target = document.getElementById(id);
+        if(target){ ev.preventDefault(); target.open = true; target.scrollIntoView({behavior:'smooth', block:'start'}); highlightTOC(); }
+      });
+    });
+
+    // 标签筛选（兼容 <details>）
+    const tagBtns = document.querySelectorAll('.tagbtn');
+    tagBtns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        tagBtns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const key = btn.dataset.tag;
+        entries.forEach(el=>{
+          const tags = (el.dataset.tags||'');
+          const show = (key==='*' || tags.includes(key));
+          el.style.display = show ? '' : 'none';
+          if(!show) el.open = false; // 隐藏时收起
+        });
+        highlightTOC();
+      });
+    });
+  </script>
+</body>
+</html>
