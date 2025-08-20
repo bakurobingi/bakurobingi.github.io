@@ -23,4 +23,52 @@
     "year": 2025,
     "tags": ["练习"]
   }
+  {
+    "title": "",
+    "thumb": "assets/gallery4-thumb.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/%E5%8D%9A%E5%AE%A2%E6%8F%92%E5%9B%BE/%E6%8F%92%E7%94%BB4.jpg",
+    "desc": "稿",
+    "year": 2025,
+    "tags": ["其他"]
+  }
+  {
+    "title": "",
+    "thumb": "assets/gallery5-thumb.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/%E5%8D%9A%E5%AE%A2%E6%8F%92%E5%9B%BE/GmySgTmWEAAIe8h.jpg",
+    "desc": "P2",
+    "year": 2025,
+    "tags": ["game"]
+  }
+  {
+    "title": "",
+    "thumb": "assets/gallery6-thumb.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/%E5%8D%9A%E5%AE%A2%E6%8F%92%E5%9B%BE/GmYtPQJa4AAQ5Wq.jpg",
+    "desc": "",
+    "year": 2025,
+    "tags": ["练习"]
+  }
+  {
+    "title": "",
+    "thumb": "assets/gallery7-thumb.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/%E5%8D%9A%E5%AE%A2%E6%8F%92%E5%9B%BE/Gn773xSaUAAixxa.jpg",
+    "desc": "龙马",
+    "year": 2025,
+    "tags": ["game"]
+  }
+  {
+    "title": "",
+    "thumb": "assets/gallery8-thumb.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/%E5%8D%9A%E5%AE%A2%E6%8F%92%E5%9B%BE/Gns0eWdXsAAOBva.jpg",
+    "desc": "片刀",
+    "year": 2025,
+    "tags": ["game"]
+  }
+  {
+    "title": "",
+    "thumb": "assets/gallery9-thumb.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/%E5%8D%9A%E5%AE%A2%E6%8F%92%E5%9B%BE/Gqb1Vx1XgAAzj7e.jpg",
+    "desc": "练",
+    "year": 2025,
+    "tags": ["练习"]
+  }
 ]
