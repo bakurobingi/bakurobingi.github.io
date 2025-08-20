@@ -14,7 +14,7 @@ html,body{
 h1{font-size:20px;font-weight:700;}
 h2{font-size:18px;font-weight:700;color:var(--main-color);}
 h3{font-size:16px;}
-p,li,a{font-size:12px;}
+p,li,a { font-size:inherit;}
 
 /* —— 通用容器与按钮 —— */
 .container{
@@ -58,13 +58,13 @@ p,li,a{font-size:12px;}
 .diary-nav li{margin:8px 0;}
 .diary-nav a{color:#333;text-decoration:none;}
 .diary-nav a:hover{color:var(--main-color);}
-.diary-content{flex:3;background:#fff;padding:20px;border-radius:10px;border:1px solid #ddd;}
+.diary-content{font-size:20px;flex:3;background:#fff;padding:20px;border-radius:10px;border:1px solid #ddd;}
 .diary-content *{box-sizing:border-box;}
 .diary-content img,.diary-content video,.diary-content canvas{
   max-width:100%!important;height:auto!important;display:block;margin:12px auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 .diary-content table,.diary-content pre,.diary-content code{max-width:100%;overflow-x:auto;display:block;}
-.diary-content{overflow-wrap:anywhere;word-break:break-word;}
+.diary-content{font-size:20px;overflow-wrap:anywhere;word-break:break-word;}
 .diary-content {
   flex:3;
   background:#fff;
@@ -75,7 +75,7 @@ p,li,a{font-size:12px;}
   word-break:break-word;
 
   /* 👇 新增：正文整体字号 */
-  font-size:18px;  
+  font-size:20px;  
   line-height:1.8; /* 行距可以顺便调大一点，阅读更舒服 */
 }
 
