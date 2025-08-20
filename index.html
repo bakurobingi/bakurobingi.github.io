@@ -1,235 +1,37 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>我的小画廊</title>
-<style>
-  :root{
-    --card-bg: rgba(255,255,255,.85);
-    --blur: 10px;
-    --border:#e3e3e3;
-    --ink:#2b2b35;
-    --muted:#666;
-    --accent:#6f66d9;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-    background:url("你的背景图URL") center/cover fixed no-repeat;
-    min-height:100vh; display:flex; justify-content:center; align-items:center; color:var(--ink);
-  }
-  .container{
-    display:flex; width:90%; max-width:1000px; min-height:80vh;
-    background:var(--card-bg); backdrop-filter:blur(var(--blur));
-    border-radius:14px; box-shadow:0 4px 20px rgba(0,0,0,.15); overflow:hidden;
-  }
-  /* 左侧 */
-  .left{ width:35%; display:flex; flex-direction:column; border-right:1px solid var(--border); }
-  .profile{ padding:18px; text-align:center; border-bottom:1px solid var(--border); background:rgba(255,255,255,.6); backdrop-filter:blur(6px);}
-  .profile img{ width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 0 10px rgba(0,0,0,.2);margin-bottom:8px;}
-  .profile h2{ margin:4px 0 2px; font-size:18px;}
-  .profile p{ margin:0 0 6px; font-size:13px; color:#444;}
-  .links a{ margin:0 6px; font-size:13px; color:#555; text-decoration:none;}
-  .links a:hover{ text-decoration:underline;}
-
-  .toc{ padding:12px 16px; border-bottom:1px solid var(--border); background:rgba(255,255,255,.55); backdrop-filter:blur(6px);}
-  .toc h3{ margin:0 0 8px; font-size:14px; color:#666; }
-  .toc a{ display:block; padding:6px 8px; border-radius:8px; color:#333; text-decoration:none;}
-  .toc a.active, .toc a:hover{ background:#ececff; color:#23244a;}
-
-  .tags{ display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;}
-  .tagbtn{ padding:4px 10px; border:1px solid #d9dbea; background:#f0f1f8; color:#50536b; border-radius:999px; font-size:12px; cursor:pointer;}
-  .tagbtn.active{ background:#e8e9fb; color:#3b3f8f; border-color:#c9ccf4;}
-
-  .diary{ flex:1; overflow-y:auto; padding:14px 16px; }
-  .item{ border:1px solid #eee; background:#fff; border-radius:12px; padding:10px 12px; margin-bottom:12px; cursor:pointer; position:relative;}
-  .item:hover{ outline:2px solid #ececff;}
-  .item h4{ margin:0 24px 4px 0; font-size:14px; color:#1f2150;}
-  .item .summary{ margin:0; font-size:13px; color:#555; line-height:1.4;}
-  .item .ext{ position:absolute; right:10px; top:10px; text-decoration:none; color:#888;}
-  .item .ext:hover{ color:#333;}
-
-  /* 右侧 */
-  .right{ width:65%; padding:20px; display:flex; flex-direction:column; gap:12px;}
-  .right header{ display:flex; align-items:center; justify-content:space-between;}
-  .right h2{ margin:0; color:var(--accent); }
-  .backbtn{ display:none; border:1px solid var(--border); background:#fff; color:#333; padding:6px 10px; border-radius:8px; cursor:pointer;}
-  .backbtn:hover{ background:#f5f5ff;}
-
-  /* 画廊 */
-  .gallery{ display:grid; grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:10px;}
-  .gallery img{ width:100%; border-radius:8px; cursor:pointer; transition:transform .2s;}
-  .gallery img:hover{ transform:scale(1.05); }
-
-  /* 全文容器 */
-  #articleView{ display:none; background:#fff; border:1px solid #eee; border-radius:12px; padding:16px; overflow:auto; }
-
-  /* 灯箱 */
-  .lightbox{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); z-index:99; justify-content:center; align-items:center;}
-  .lightbox img{ max-width:90%; max-height:90%; border-radius:10px;}
-
-  @media (max-width:900px){ .container{flex-direction:column; width:96%;} .left,.right{width:100%} .left{border-right:none; border-bottom:1px solid var(--border);} }
-</style>
+  <meta charset="UTF-8">
+  <title>我的小站</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- 背景容器 -->
+  <div class="background"></div>
+
+  <!-- 主体内容 -->
   <div class="container">
-    <!-- 左 -->
-    <aside class="left">
-      <div class="profile">
-        <img src="你的头像URL" alt="头像">
-        <h2>你的名字</h2>
-        <p>一句自我介绍：业余画师 / 练习记录 / 性癖自由。</p>
-        <div class="links">
-          <a href="https://twitter.com/你的账号" target="_blank">Twitter</a>
-          <a href="https://pixiv.net/users/你的ID" target="_blank">Pixiv</a>
-          <a href="mailto:you@example.com">Email</a>
-        </div>
+    <!-- 头像和简介 -->
+    <div class="profile">
+      <img src="assets/avatar.jpg" alt="我的头像" class="avatar">
+      <h1>某某某</h1>
+      <p>欢迎光临我的小站！这里有我的日记和画廊。</p>
+      <div class="links">
+        <a href="https://twitter.com/xxxx" target="_blank">Twitter</a> |
+        <a href="mailto:me@example.com">Email</a>
       </div>
+    </div>
 
-      <nav class="toc" id="toc">
-        <h3>目录</h3>
-        <a href="#d-2025-08-20">2025-08-20</a>
-        <a href="#d-2025-08-15">2025-08-15</a>
-        <a href="#d-2025-08-10">2025-08-10</a>
+    <!-- 展示视觉图 -->
+    <div class="visual">
+      <img src="assets/visual.jpg" alt="展示图">
+    </div>
 
-        <h3 style="margin-top:12px;">标签</h3>
-        <div class="tags">
-          <button class="tagbtn active" data-tag="*">全部</button>
-          <button class="tagbtn" data-tag="速写">速写</button>
-          <button class="tagbtn" data-tag="着衣">着衣</button>
-          <button class="tagbtn" data-tag="上色">上色</button>
-        </div>
-      </nav>
-
-      <!-- 日记列表：标题 + 摘要；点击加载右侧全文 -->
-      <div class="diary" id="diary">
-        <div class="item" data-id="2025-08-20" data-tags="速写 着衣" onclick="openEntry('2025-08-20')">
-          <a class="ext" href="posts/2025-08-20.html" target="_blank" title="新窗口查看">↗</a>
-          <h4 id="d-2025-08-20">2025-08-20</h4>
-          <p class="summary">边缘粉光练习，重点是“贴合感”。（一两句摘要）</p>
-        </div>
-
-        <div class="item" data-id="2025-08-15" data-tags="上色" onclick="openEntry('2025-08-15')">
-          <a class="ext" href="posts/2025-08-15.html" target="_blank" title="新窗口查看">↗</a>
-          <h4 id="d-2025-08-15">2025-08-15</h4>
-          <p class="summary">减少二分法，尝试面分+反射光的小范围处理。</p>
-        </div>
-
-        <div class="item" data-id="2025-08-10" data-tags="速写" onclick="openEntry('2025-08-10')">
-          <a class="ext" href="posts/2025-08-10.html" target="_blank" title="新窗口查看">↗</a>
-          <h4 id="d-2025-08-10">2025-08-10</h4>
-          <p class="summary">快速人体结构草图，先形后线，允许“任意线”。</p>
-        </div>
-      </div>
-    </aside>
-
-    <!-- 右：标题 + 返回按钮 + 画廊/全文切换 -->
-    <section class="right">
-      <header>
-        <h2 id="rightTitle">画廊</h2>
-        <button class="backbtn" id="backBtn" onclick="showGallery()">← 返回画廊</button>
-      </header>
-
-      <!-- 画廊（默认显示） -->
-      <div id="galleryView">
-        <div class="gallery" id="galleryGrid">
-          <!-- 示例缩略图；换成你的图床地址即可 -->
-          <img src="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg" alt="图1">
-          <img src="https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg" alt="图2">
-          <img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg" alt="图3">
-        </div>
-      </div>
-
-      <!-- 文章全文（点击左侧后加载展示） -->
-      <article id="articleView"></article>
-    </section>
+    <!-- 分类板块 -->
+    <div class="sections">
+      <a href="diary.html" class="section">📒 日记</a>
+      <a href="gallery.html" class="section">🎨 落书画廊</a>
+    </div>
   </div>
-
-  <!-- 灯箱 -->
-  <div class="lightbox" id="lightbox"><img src="" alt=""></div>
-
-<script>
-  // ========== 画廊：点击放大 ==========
-  const lightbox = document.getElementById('lightbox');
-  const lbImg = lightbox.querySelector('img');
-  document.querySelectorAll('.gallery img').forEach(img=>{
-    img.addEventListener('click',()=>{ lightbox.style.display='flex'; lbImg.src=img.getAttribute('data-full')||img.src; });
-  });
-  lightbox.addEventListener('click',()=> lightbox.style.display='none');
-
-  // ========== 标签筛选（左侧） ==========
-  const entries = [...document.querySelectorAll('.diary .item')];
-  const tagBtns = document.querySelectorAll('.tagbtn');
-  tagBtns.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      tagBtns.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      const key = btn.dataset.tag;
-      entries.forEach(el=>{
-        const show = (key==='*' || (el.dataset.tags||'').includes(key));
-        el.style.display = show ? '' : 'none';
-      });
-    });
-  });
-
-  // ========== 目录高亮（跟随左侧滚动） ==========
-  const tocLinks = document.querySelectorAll('.toc a[href^="#"]');
-  const diary = document.getElementById('diary');
-  function highlightTOC(){
-    const y = diary.scrollTop + 40;
-    let activeId = entries[0]?.querySelector('h4')?.id;
-    entries.forEach(box=>{
-      const h = box.querySelector('h4');
-      if(box.offsetTop <= y) activeId = h.id;
-    });
-    tocLinks.forEach(a=> a.classList.toggle('active', a.getAttribute('href')==='#'+activeId));
-  }
-  diary.addEventListener('scroll', highlightTOC, {passive:true});
-  highlightTOC();
-
-  // ========== 右侧：画廊/文章 切换 ==========
-  const rightTitle = document.getElementById('rightTitle');
-  const backBtn = document.getElementById('backBtn');
-  const galleryView = document.getElementById('galleryView');
-  const articleView = document.getElementById('articleView');
-
-  function showGallery(){
-    rightTitle.textContent = '画廊';
-    backBtn.style.display = 'none';
-    articleView.style.display = 'none';
-    galleryView.style.display = 'block';
-    articleView.innerHTML = '';
-  }
-
-  // 打开文章（从 /posts/YYYY-MM-DD.html 取全文）
-  function openEntry(id){
-    fetch(`posts/${id}.html?ts=${Date.now()}`)
-      .then(res => res.ok ? res.text() : Promise.reject(res.status))
-      .then(html => {
-        rightTitle.textContent = id;
-        backBtn.style.display = 'inline-block';
-        galleryView.style.display = 'none';
-        articleView.style.display = 'block';
-        articleView.innerHTML = html;
-        articleView.scrollTop = 0;
-      })
-      .catch(()=>alert('找不到文章：posts/'+id+'.html'));
-  }
-  window.openEntry = openEntry; // 供 HTML onclick 调用
-
-  // 目录点击：展开到对应日记并加载右侧
-  tocLinks.forEach(a=>{
-    a.addEventListener('click', (ev)=>{
-      const id = a.getAttribute('href').slice(1).replace('d-','');
-      const target = document.querySelector(`.item[data-id="${id}"]`);
-      if(target){
-        ev.preventDefault();
-        target.scrollIntoView({behavior:'smooth', block:'start'});
-        openEntry(id);
-      }
-    });
-  });
-</script>
 </body>
 </html>

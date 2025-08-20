@@ -1,0 +1,219 @@
+/* 全局 */
+body {
+  margin: 0;
+  font-family: "Microsoft YaHei", sans-serif;
+  color: #333;
+  text-align: center;
+  background: #f5f5f5 url("assets/bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  overflow-x: hidden;
+}
+
+/* 半透明白色背景容器 */
+.container {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+/* 返回主页按钮 */
+.back-home {
+  margin: 20px;
+  text-align: left;
+}
+.back-home a {
+  color: #c68c00;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+}
+.back-home a:hover {
+  text-decoration: underline;
+}
+
+/* 首页头像 */
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #c68c00;
+  margin-bottom: 15px;
+}
+
+/* 链接 */
+.links a {
+  color: #c68c00;
+  text-decoration: none;
+  margin: 0 5px;
+  font-weight: bold;
+}
+.links a:hover {
+  text-decoration: underline;
+}
+
+/* 视觉图 */
+.visual img {
+  max-width: 100%;
+  margin: 30px 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* 分类入口按钮 */
+.sections {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+.section {
+  display: inline-block;
+  padding: 15px 40px;
+  background: #fff;
+  border: 2px solid #c68c00;
+  border-radius: 12px;
+  font-size: 20px;
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.section:hover {
+  background: #c68c00;
+  color: #fff;
+}
+
+/* 日记页布局 */
+.diary-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+  text-align: left;
+}
+
+/* 左侧导航 */
+.diary-nav {
+  flex: 1;
+  background: rgba(255,255,255,0.95);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  max-width: 250px;
+}
+.diary-nav h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #c68c00;
+}
+.diary-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.diary-nav li {
+  margin: 8px 0;
+}
+.diary-nav a {
+  color: #333;
+  text-decoration: none;
+}
+.diary-nav a:hover {
+  color: #c68c00;
+}
+
+/* 右侧正文 */
+.diary-content {
+  flex: 3;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+.diary-content h2 {
+  color: #c68c00;
+}
+
+/* 画廊页 */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+.gallery-grid img {
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.gallery-grid img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Lightbox 弹出层 */
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* 全局主色 */
+:root {
+  --main-color: #8c84d9;   /* 紫色强调 */
+  --light-color: #dcd6f7;  /* 淡紫高光 */
+  --text-color: #333;      /* 主文字 */
+  --bg-color: #f5f5f5;     /* 背景底色 */
+}
+
+/* 返回主页按钮 */
+.back-home a {
+  color: var(--main-color);
+}
+
+/* 链接 */
+.links a {
+  color: var(--main-color);
+}
+
+/* 分类入口按钮 */
+.section {
+  border: 2px solid var(--main-color);
+  color: var(--text-color);
+  background: #fff;
+}
+.section:hover {
+  background: var(--main-color);
+  color: #fff;
+}
+
+/* 日记导航标题 */
+.diary-nav h2 {
+  color: var(--main-color);
+}
+
+/* 日记正文标题 */
+.diary-content h2 {
+  color: var(--main-color);
+}
+
+/* 画廊缩略图 hover 效果 */
+.gallery-grid img:hover {
+  box-shadow: 0 4px 12px var(--light-color);
+  transform: scale(1.05);
+}
+
