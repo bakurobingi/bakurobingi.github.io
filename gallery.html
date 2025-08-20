@@ -13,15 +13,30 @@
   </div>
 
   <div class="container gallery-container">
-    <h1>Gallery</h1>
+    <h1>🎨 Gallery</h1>
 
-    <!-- 自动生成缩略图的网格 -->
+    <!-- 筛选条（自动生成年份按钮） -->
+    <div id="filter-bar" class="filter-bar">
+      <!-- JS 会自动插入 “全部”、“2025”、“2024”... -->
+    </div>
+
+    <!-- 缩略图网格（自动渲染） -->
     <div id="gallery-grid" class="gallery-grid"></div>
+
+    <!-- 分页控件 -->
+    <div id="pagination" class="pagination">
+      <button id="prev-page" class="page-btn">上一页</button>
+      <span id="page-info" class="page-info"></span>
+      <button id="next-page" class="page-btn">下一页</button>
+    </div>
   </div>
 
-  <!-- Lightbox -->
-  <div id="lightbox" class="lightbox" onclick="closeImage()">
+  <!-- Lightbox：带左右翻页与标题 -->
+  <div id="lightbox" class="lightbox">
+    <button class="lightbox-btn prev" onclick="prevImage()">←</button>
     <img id="lightbox-img" src="" alt="">
+    <button class="lightbox-btn next" onclick="nextImage()">→</button>
+    <p id="lightbox-caption"></p>
   </div>
 
   <script src="script.js"></script>
