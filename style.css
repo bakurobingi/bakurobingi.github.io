@@ -8,7 +8,7 @@
 html,body{
   margin:0; overflow-x:hidden; text-align:center;
   font-family:"YouYuan","幼圆","Hiragino Maru Gothic ProN","Yu Gothic UI","Meiryo","Comic Sans MS","Baloo 2",sans-serif;
-  font-size:16px; line-height:1.6; color:var(--text-color);
+  font-size:20px; line-height:1.6; color:var(--text-color);
   background:var(--bg-color) url("assets/bg.jpg") no-repeat center/cover fixed;
 }
 h1{font-size:20px;font-weight:700;}
@@ -65,6 +65,19 @@ p,li,a{font-size:12px;}
 }
 .diary-content table,.diary-content pre,.diary-content code{max-width:100%;overflow-x:auto;display:block;}
 .diary-content{overflow-wrap:anywhere;word-break:break-word;}
+.diary-content {
+  flex:3;
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+
+  /* 👇 新增：正文整体字号 */
+  font-size:18px;  
+  line-height:1.8; /* 行距可以顺便调大一点，阅读更舒服 */
+}
 
 /* —— 画廊网格 —— */
 .gallery-grid{
