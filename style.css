@@ -8,7 +8,7 @@
 html,body{
   margin:0; overflow-x:hidden; text-align:center;
   font-family:"YouYuan","幼圆","Hiragino Maru Gothic ProN","Yu Gothic UI","Meiryo","Comic Sans MS","Baloo 2",sans-serif;
-  font-size:20px; line-height:1.6; color:var(--text-color);
+  font-size:18px; line-height:1.6; color:var(--text-color);
   background:var(--bg-color) url("assets/bg.jpg") no-repeat center/cover fixed;
 }
 h1{font-size:20px;font-weight:700;}
@@ -32,7 +32,7 @@ p,li,a { font-size:inherit;}
   border:2px solid var(--main-color);
   border-radius:16px;
 
-  font-size:12px;              /* 改小字体 */
+  font-size:13px;              /* 改小字体 */
   font-weight:700;
   color:var(--main-color);     /* 字体颜色改成和边框一致 */
   background:#fff;
@@ -75,7 +75,7 @@ p,li,a { font-size:inherit;}
   word-break:break-word;
 
   /* 👇 新增：正文整体字号 */
-  font-size:20px;  
+  font-size:18px;  
   line-height:1.8; /* 行距可以顺便调大一点，阅读更舒服 */
 }
 
