@@ -165,9 +165,11 @@ body {
   align-items: center;
   z-index: 999;
 }
+/* —— 画廊大图 Lightbox —— */
 .lightbox img {
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 90vw;      /* 不超过屏幕宽度 */
+  max-height: 90vh;     /* 不超过屏幕高度 */
+  object-fit: contain;  /* 保持比例，完整显示 */
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
@@ -268,5 +270,39 @@ body {
   text-align: center;
   background: #f5f5f5 url("assets/bg.jpg") no-repeat center center fixed;
   background-size: cover;
+  overflow-x: hidden;
+}
+
+/* —— 日记正文里的图片/视频：自适应容器，不要破框 —— */
+.diary-content * { box-sizing: border-box; }
+
+.diary-content img,
+.diary-content video,
+.diary-content canvas {
+  max-width: 100% !important;  /* 关键：不超过正文容器宽度 */
+  height: auto !important;
+  display: block;              /* 避免跟文字并排导致溢出 */
+  margin: 12px auto;           /* 居中+留白 */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* 兼容大表格/代码块也不撑破 */
+.diary-content table,
+.diary-content pre,
+.diary-content code {
+  max-width: 100%;
+  overflow-x: auto;
+  display: block;
+}
+
+/* 长英文/URL 自动换行，避免把容器撑宽 */
+.diary-content {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* （可选）整体不出现横向滚动条 */
+html, body {
   overflow-x: hidden;
 }
