@@ -1,25 +1,25 @@
 [
   {
     "title": "",
-    "thumb": "assets/gallery1-thumb.jpg",
+    "thumb": "gallery_thumbs/gallery1-thumb.jpg",
     "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/blog%E7%94%A8%E5%9B%BE/0513.jpg",
-    "desc": "20250513"
+    "desc": "20250513",
     "year": 2025,
     "tags": ["练习"]
   },
   {
     "title": "",
-    "thumb": "assets/gallery2-thumb.jpg",
+    "thumb": "gallery_thumbs/gallery2-thumb.jpg",
     "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/blog%E7%94%A8%E5%9B%BE/GuMjFF5bYAA9U15.jpg",
-    "desc": "2025"
+    "desc": "2025",
     "year": 2025,
     "tags": ["练习"]
   },
   {
     "title": "",
-    "thumb": "assets/gallery3-thumb.jpg",
+    "thumb": "gallery_thumbs/gallery3-thumb.jpg",
     "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/blog%E7%94%A8%E5%9B%BE/GxRHmjyWsAAOS5T.jpg",
-    "desc": "师姐"
+    "desc": "师姐",
     "year": 2025,
     "tags": ["练习"]
   }
