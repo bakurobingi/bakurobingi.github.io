@@ -8,7 +8,7 @@
 html,body{
   margin:0; overflow-x:hidden; text-align:center;
   font-family:"YouYuan","幼圆","Hiragino Maru Gothic ProN","Yu Gothic UI","Meiryo","Comic Sans MS","Baloo 2",sans-serif;
-  font-size:14px; line-height:1.6; color:var(--text-color);
+  font-size:16px; line-height:1.6; color:var(--text-color);
   background:var(--bg-color) url("assets/bg.jpg") no-repeat center/cover fixed;
 }
 h1{font-size:20px;font-weight:700;}
@@ -28,7 +28,7 @@ p,li,a{font-size:12px;}
 .links a:hover{text-decoration:underline;}
 .section {
   display:inline-block;
-  padding:15px 40px;
+  padding:16px 40px;
   border:2px solid var(--main-color);
   border-radius:16px;
 
