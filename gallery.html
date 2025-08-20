@@ -6,28 +6,22 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- 背景 -->
   <div class="background"></div>
 
-  <!-- 返回主页按钮 -->
   <div class="back-home">
     <a href="index.html">← 返回主页</a>
   </div>
 
-  <!-- 主体内容 -->
   <div class="container gallery-container">
     <h1>🎨 落书画廊</h1>
-    <div class="gallery-grid">
-      <!-- 缩略图示例，路径可以换成自己的图 -->
-      <img src="assets/gallery1-thumb.jpg" alt="画作1" onclick="openImage('assets/gallery1.jpg')">
-      <img src="assets/gallery2-thumb.jpg" alt="画作2" onclick="openImage('assets/gallery2.jpg')">
-      <img src="assets/gallery3-thumb.jpg" alt="画作3" onclick="openImage('assets/gallery3.jpg')">
-    </div>
+
+    <!-- 自动生成缩略图的网格 -->
+    <div id="gallery-grid" class="gallery-grid"></div>
   </div>
 
-  <!-- 弹出大图预览 -->
+  <!-- Lightbox -->
   <div id="lightbox" class="lightbox" onclick="closeImage()">
-    <img id="lightbox-img" src="">
+    <img id="lightbox-img" src="" alt="">
   </div>
 
   <script src="script.js"></script>

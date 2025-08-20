@@ -1,0 +1,20 @@
+[
+  {
+    "title": "狼哥速写",
+    "thumb": "assets/gallery1-thumb.jpg",
+    "full": "https://your-cdn.example.com/art/gallery1.jpg",
+    "desc": "铅笔+上色30min练习"
+  },
+  {
+    "title": "夜色骑士",
+    "thumb": "assets/gallery2-thumb.jpg",
+    "full": "https://your-cdn.example.com/art/gallery2.jpg",
+    "desc": "ZZZ fanart"
+  },
+  {
+    "title": "雨",
+    "thumb": "assets/gallery3-thumb.jpg",
+    "full": "https://your-cdn.example.com/art/gallery3.jpg",
+    "desc": "水彩练习"
+  }
+]

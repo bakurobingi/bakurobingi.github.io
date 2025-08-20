@@ -217,3 +217,39 @@ body {
   transform: scale(1.05);
 }
 
+/* 全局字体 + 缩小字号 */
+body {
+  margin: 0;
+  font-family: "YouYuan", "幼圆", "Microsoft YaHei", sans-serif;
+  font-size: 14px;   /* 默认从 16px ↓ 到 14px 更小巧 */
+  line-height: 1.6;
+  color: #333;
+  text-align: center;
+  background: #f5f5f5 url("assets/bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  overflow-x: hidden;
+}
+
+/* 标题稍微大一丢丢，依旧保持可爱 */
+h1 {
+  font-size: 22px;
+  font-weight: bold;
+}
+h2 {
+  font-size: 18px;
+  font-weight: bold;
+}
+h3 {
+  font-size: 16px;
+}
+p, li, a {
+  font-size: 14px;  /* 和正文一致 */
+}
+
+.container {
+  border-radius: 20px;         /* 圆润一些 */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.section {
+  border-radius: 16px;
+}
