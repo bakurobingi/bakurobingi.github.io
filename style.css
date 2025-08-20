@@ -58,7 +58,7 @@ p,li,a { font-size:inherit;}
 .diary-nav li{margin:8px 0;}
 .diary-nav a{color:#333;text-decoration:none;}
 .diary-nav a:hover{color:var(--main-color);}
-.diary-content{font-size:20px;flex:3;background:#fff;padding:20px;border-radius:10px;border:1px solid #ddd;}
+.diary-content{font-size:16px;flex:3;background:#fff;padding:20px;border-radius:10px;border:1px solid #ddd;}
 .diary-content *{box-sizing:border-box;}
 .diary-content img,.diary-content video,.diary-content canvas{
   max-width:100%!important;height:auto!important;display:block;margin:12px auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);
@@ -68,14 +68,14 @@ p,li,a { font-size:inherit;}
 .diary-content {
   flex:3;
   background:#fff;
-  padding:20px;
+  padding:16px;
   border-radius:10px;
   border:1px solid #ddd;
   overflow-wrap:anywhere;
   word-break:break-word;
 
   /* 👇 新增：正文整体字号 */
-  font-size:18px;  
+  font-size:16px;  
   line-height:1.8; /* 行距可以顺便调大一点，阅读更舒服 */
 }
 
@@ -192,7 +192,7 @@ html {
 /* 2) 统一日记正文字号（无视粘贴进来的乱字号） */
 .diary-content,
 .diary-content * {
-  font-size: 20px !important;     /* 你要的 20px */
+  font-size: 14px !important; 
   font-family: inherit !important;
   line-height: 1.8 !important;
 }
