@@ -33,91 +33,94 @@ function safeFetchJSON(url, onOK, mountId) {
 function initDiary() {
   const listWrap = document.getElementById("diary-list");
   const contentEl = document.getElementById("diary-content");
-  if (!listWrap || !contentEl) return; // 不在日记页
+  if (!listWrap || !contentEl) return;
 
-  safeFetchJSON("assets/diaryList.json", (mapping) => {
-    const entries = Object.entries(mapping);  // [label, file]
+  safeFetchJSON("assets/diaryList.json", (raw) => {
+    // 兼容：如果还是旧的“映射对象”也能自动转成数组
+    let items = Array.isArray(raw) ? raw : Object.entries(raw).map(([title, link]) => {
+      // 尝试从 link 或 title 里提取 YYYY-MM-DD
+      const mLink = /(\d{4})-(\d{2})-(\d{2})/.exec(link);
+      const mTitl = /(\d{4})(?:[-/年](\d{1,2})[-/月](\d{1,2}))?/.exec(title);
+      const date = mLink ? `${mLink[1]}-${mLink[2]}-${mLink[3]}`
+               : mTitl ? `${mTitl[1]}-${String(mTitl[2]||'01').padStart(2,'0')}-${String(mTitl[3]||'01').padStart(2,'0')}`
+                       : "1970-01-01";
+      return { title, date, link };
+    });
 
-    // 解析日期 & 年份
-    const asDate = s => {
-      const m = /^(\d{4})(?:-(\d{2})-(\d{2}))?/.exec(s);
-      return m ? new Date(+m[1], (m[2] || 1) - 1, m[3] || 1).getTime() : -Infinity;
+    // 工具函数
+    const toTime = s => {
+      const m = /^(\d{4})(?:-(\d{2})-(\d{2}))?/.exec(s || "");
+      return m ? new Date(+m[1], (m[2]||1)-1, m[3]||1).getTime() : -Infinity;
     };
     const yearOf = s => (s.match(/^(\d{4})/) || [,"其它"])[1];
 
-    // 先按日期倒序（新→旧）
-    entries.sort((a,b) => asDate(b[0]) - asDate(a[0]) || a[0].localeCompare(b[0], "zh"));
+    // 排序：按日期倒序（新→旧）
+    items.sort((a,b) => toTime(b.date) - toTime(a.date) || (b.title||"").localeCompare(a.title||"", "zh"));
 
-    // 分组 { year: [{label,file,date}] }
+    // 分组：{ year -> [items...] }；同一年内仍按日期倒序
     const groups = new Map();
-    for (const [label, file] of entries) {
-      const y = yearOf(label);
+    items.forEach(it => {
+      const y = String(yearOf(it.date));
       if (!groups.has(y)) groups.set(y, []);
-      groups.get(y).push({ label, file, date: asDate(label) });
-    }
-    // 组内也按日期倒序（想要正序就改成 a.date - b.date）
-    for (const arr of groups.values()) arr.sort((a,b)=> b.date - a.date);
+      groups.get(y).push(it);
+    });
+    for (const arr of groups.values()) arr.sort((a,b)=> toTime(b.date) - toTime(a.date));
 
-    // 读取折叠状态
+    // 折叠状态记忆
     const collapsed = new Set(JSON.parse(localStorage.getItem("diary-collapsed") || "[]"));
 
     // 渲染
     listWrap.innerHTML = "";
-    const years = Array.from(groups.keys()).sort((a,b) => b - a); // 年份倒序
+    const years = Array.from(groups.keys()).sort((a,b) => b - a);
     let firstFileToLoad = null;
 
     years.forEach((y, yi) => {
-      const items = groups.get(y);
+      const arr = groups.get(y);
 
       const group = document.createElement("div");
-      group.className = "year-group" + (collapsed.has(String(y)) ? " collapsed" : "");
+      group.className = "year-group" + (collapsed.has(y) ? " collapsed" : "");
 
-      // 年份按钮（可折叠）
       const btn = document.createElement("button");
       btn.className = "year-toggle";
       btn.type = "button";
-      btn.setAttribute("aria-expanded", !collapsed.has(String(y)));
-      btn.innerHTML = `${y} 年 <span class="count">(${items.length})</span><span class="chev">▾</span>`;
+      btn.setAttribute("aria-expanded", !collapsed.has(y));
+      btn.innerHTML = `${y} 年 <span class="count">(${arr.length})</span><span class="chev">▾</span>`;
       btn.onclick = () => {
         group.classList.toggle("collapsed");
         const c = group.classList.contains("collapsed");
         btn.setAttribute("aria-expanded", !c);
         const set = new Set(JSON.parse(localStorage.getItem("diary-collapsed") || "[]"));
-        if (c) set.add(String(y)); else set.delete(String(y));
+        if (c) set.add(y); else set.delete(y);
         localStorage.setItem("diary-collapsed", JSON.stringify([...set]));
       };
       group.appendChild(btn);
 
-      // 该年的条目列表
       const ul = document.createElement("ul");
       ul.className = "year-list";
-      items.forEach((it, idx) => {
+
+      arr.forEach((it, idx) => {
         const li = document.createElement("li");
-        const a = document.createElement("a");
+        const a  = document.createElement("a");
         a.href = "javascript:void(0)";
-        a.textContent = it.label; // 你可以改成显示 it.label 或更友好的标题
+        a.textContent = it.title || it.date;
         a.onclick = () => {
-          // 高亮
           listWrap.querySelectorAll("a.active").forEach(x => x.classList.remove("active"));
           a.classList.add("active");
-          // 加载正文
-          loadDiary(it.file);
+          loadDiary(it.link); // 片段在 assets/diary/ 下
         };
         li.appendChild(a);
         ul.appendChild(li);
 
-        // 默认加载：最新年份的第一篇
-        if (yi === 0 && idx === 0) {
+        if (yi === 0 && idx === 0) { // 默认加载最新年份的第一篇
           a.classList.add("active");
-          firstFileToLoad = it.file;
+          firstFileToLoad = it.link;
         }
       });
-      group.appendChild(ul);
 
+      group.appendChild(ul);
       listWrap.appendChild(group);
     });
 
-    // 默认加载
     if (firstFileToLoad) loadDiary(firstFileToLoad);
     else contentEl.innerHTML = "<p>暂无日记。</p>";
   }, "diary-list");
