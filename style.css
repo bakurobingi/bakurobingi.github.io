@@ -210,3 +210,20 @@ html {
 /* 5) 兜底：别让全局把 p / li / a 强行改小 */
 p, li, a { font-size: inherit; }
 
+/* 年份折叠样式 */
+#diary-list .year-toggle{
+  width:100%; text-align:left; padding:8px 10px; margin:10px 0 4px;
+  border:1px solid #e5e5e5; background:#fff; border-radius:8px;
+  font-weight:700; color:var(--text-color); cursor:pointer;
+}
+#diary-list .year-toggle .count{ color:#999; font-weight:400; margin-left:.25em; }
+#diary-list .year-toggle .chev{ float:right; transition:.2s; }
+#diary-list .year-group.collapsed .year-toggle .chev{ transform:rotate(-90deg); }
+
+#diary-list .year-list{ list-style:none; padding-left:10px; margin:6px 0 12px; }
+#diary-list .year-group.collapsed .year-list{ display:none; }
+#diary-list .year-list li{ margin:6px 0; }
+#diary-list .year-list a{ color:#333; text-decoration:none; border-radius:6px; padding:4px 6px; display:inline-block; }
+#diary-list .year-list a:hover{ color:var(--main-color); background:rgba(140,132,217,.06); }
+#diary-list .year-list a.active{ color:#fff; background:var(--main-color); }
+

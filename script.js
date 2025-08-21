@@ -24,47 +24,101 @@ function safeFetchJSON(url, onOK, mountId) {
 }
 
 /* =========================================================
- * 日记：左侧列表 + 加载正文（“洗白”内联样式、统一字号）
+ * 日记：按年份分组 + 可折叠/展开 + 记忆折叠状态
  * 需要：#diary-list（左侧）、#diary-content（右侧）
  *      assets/diaryList.json 形如：
  *      { "2024-03-31": "2024-03-31.html", "2023-12-31": "2023-12-31.html" }
  *      片段放在 assets/diary/ 下
  * =======================================================*/
 function initDiary() {
-  const listEl = document.getElementById("diary-list");
+  const listWrap = document.getElementById("diary-list");
   const contentEl = document.getElementById("diary-content");
-  if (!listEl || !contentEl) return; // 不在日记页
+  if (!listWrap || !contentEl) return; // 不在日记页
 
   safeFetchJSON("assets/diaryList.json", (mapping) => {
-    // 排序（把看起来像日期的键倒序）
-    const entries = Object.entries(mapping);
-    const asDate = s => {
-      const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s);
-      return m ? new Date(+m[1], +m[2]-1, +m[3]).getTime() : -Infinity;
-    };
-    entries.sort((a,b) => asDate(b[0]) - asDate(a[0]) || a[0].localeCompare(b[0]));
+    const entries = Object.entries(mapping);  // [label, file]
 
-    // 渲染左侧列表
-    listEl.innerHTML = "";
-    entries.forEach(([key, file], idx) => {
-      const li = document.createElement("li");
-      const a  = document.createElement("a");
-      a.href = "javascript:void(0)";
-      a.textContent = key;
-      a.onclick = () => {
-        // 高亮
-        listEl.querySelectorAll("a.active").forEach(x => x.classList.remove("active"));
-        a.classList.add("active");
-        // 加载正文
-        loadDiary(file);
+    // 解析日期 & 年份
+    const asDate = s => {
+      const m = /^(\d{4})(?:-(\d{2})-(\d{2}))?/.exec(s);
+      return m ? new Date(+m[1], (m[2] || 1) - 1, m[3] || 1).getTime() : -Infinity;
+    };
+    const yearOf = s => (s.match(/^(\d{4})/) || [,"其它"])[1];
+
+    // 先按日期倒序（新→旧）
+    entries.sort((a,b) => asDate(b[0]) - asDate(a[0]) || a[0].localeCompare(b[0], "zh"));
+
+    // 分组 { year: [{label,file,date}] }
+    const groups = new Map();
+    for (const [label, file] of entries) {
+      const y = yearOf(label);
+      if (!groups.has(y)) groups.set(y, []);
+      groups.get(y).push({ label, file, date: asDate(label) });
+    }
+    // 组内也按日期倒序（想要正序就改成 a.date - b.date）
+    for (const arr of groups.values()) arr.sort((a,b)=> b.date - a.date);
+
+    // 读取折叠状态
+    const collapsed = new Set(JSON.parse(localStorage.getItem("diary-collapsed") || "[]"));
+
+    // 渲染
+    listWrap.innerHTML = "";
+    const years = Array.from(groups.keys()).sort((a,b) => b - a); // 年份倒序
+    let firstFileToLoad = null;
+
+    years.forEach((y, yi) => {
+      const items = groups.get(y);
+
+      const group = document.createElement("div");
+      group.className = "year-group" + (collapsed.has(String(y)) ? " collapsed" : "");
+
+      // 年份按钮（可折叠）
+      const btn = document.createElement("button");
+      btn.className = "year-toggle";
+      btn.type = "button";
+      btn.setAttribute("aria-expanded", !collapsed.has(String(y)));
+      btn.innerHTML = `${y} 年 <span class="count">(${items.length})</span><span class="chev">▾</span>`;
+      btn.onclick = () => {
+        group.classList.toggle("collapsed");
+        const c = group.classList.contains("collapsed");
+        btn.setAttribute("aria-expanded", !c);
+        const set = new Set(JSON.parse(localStorage.getItem("diary-collapsed") || "[]"));
+        if (c) set.add(String(y)); else set.delete(String(y));
+        localStorage.setItem("diary-collapsed", JSON.stringify([...set]));
       };
-      if (idx === 0) a.classList.add("active");
-      li.appendChild(a);
-      listEl.appendChild(li);
+      group.appendChild(btn);
+
+      // 该年的条目列表
+      const ul = document.createElement("ul");
+      ul.className = "year-list";
+      items.forEach((it, idx) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = "javascript:void(0)";
+        a.textContent = it.label; // 你可以改成显示 it.label 或更友好的标题
+        a.onclick = () => {
+          // 高亮
+          listWrap.querySelectorAll("a.active").forEach(x => x.classList.remove("active"));
+          a.classList.add("active");
+          // 加载正文
+          loadDiary(it.file);
+        };
+        li.appendChild(a);
+        ul.appendChild(li);
+
+        // 默认加载：最新年份的第一篇
+        if (yi === 0 && idx === 0) {
+          a.classList.add("active");
+          firstFileToLoad = it.file;
+        }
+      });
+      group.appendChild(ul);
+
+      listWrap.appendChild(group);
     });
 
-    // 默认加载第一篇
-    if (entries.length) loadDiary(entries[0][1]);
+    // 默认加载
+    if (firstFileToLoad) loadDiary(firstFileToLoad);
     else contentEl.innerHTML = "<p>暂无日记。</p>";
   }, "diary-list");
 }
@@ -78,38 +132,30 @@ function loadDiary(filename) {
     .then(html => {
       // 注入
       content.innerHTML = html;
-
       const scope = content;
 
       // 1) 清理：移除所有内联 style，避免污染全站
       scope.querySelectorAll("[style]").forEach(el => el.removeAttribute("style"));
-
-      // 2) 删除 <font> 标签（保留内部文字）
+      // 2) 删除 <font>（保留内容）
       scope.querySelectorAll("font").forEach(el => {
-        const parent = el.parentNode;
-        while (el.firstChild) parent.insertBefore(el.firstChild, el);
-        parent.removeChild(el);
+        const p = el.parentNode;
+        while (el.firstChild) p.insertBefore(el.firstChild, el);
+        p.removeChild(el);
       });
-
-      // 3) H1 -> H2，层级更稳
+      // 3) H1 -> H2
       scope.querySelectorAll("h1").forEach(h1 => {
         const h2 = document.createElement("h2");
         h2.innerHTML = h1.innerHTML;
         h1.replaceWith(h2);
       });
-
-      // 4) 外链默认新窗口 + 安全属性
+      // 4) 外链新窗 + 安全
       scope.querySelectorAll("a[href]").forEach(a => {
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
+        a.target = "_blank"; a.rel = "noopener noreferrer";
       });
-
-      // 5) 图片兜底：如果没有 alt，给个空；破图时不炸布局
+      // 5) 破图兜底
       scope.querySelectorAll("img").forEach(img => {
         if (!img.hasAttribute("alt")) img.alt = "";
-        img.addEventListener("error", () => {
-          img.style.display = "none";
-        });
+        img.addEventListener("error", () => { img.style.display = "none"; });
       });
     })
     .catch(err => {
@@ -119,16 +165,7 @@ function loadDiary(filename) {
 }
 
 /* =========================================================
- * 画廊：年份 + 标签 + 分页 + Lightbox
- * 需要：#year-bar  #tag-bar  #gallery-grid  #pagination
- *       #prev-page #next-page #page-info
- *       #lightbox  #lightbox-img #lightbox-caption
- *       数据：assets/galleryList.json
- *       每项形如：
- *       {
- *         "title": "", "thumb": "assets/x.jpg", "full": "https://...", 
- *         "desc": "说明", "year": 2025, "tags": ["fanart","zzz"]
- *       }
+ * 画廊（保持你原来的功能）：年份 + 标签 + 分页 + Lightbox
  * =======================================================*/
 let galleryItems = [];      // 全量
 let filteredItems = [];     // 筛选后
@@ -157,7 +194,7 @@ function initGallery() {
       const years = Array.from(new Set(items.map(i => i.year))).filter(Boolean).sort((a,b)=>b-a);
       buildFilters(yearBar, ["全部", ...years], (y) => applyYear(y));
 
-      // 标签按钮（从 tags 去重汇总）
+      // 标签按钮
       const tags = Array.from(new Set(items.flatMap(i => (i.tags || [])))).sort();
       if (tagBar && tags.length) {
         buildFilters(tagBar, ["全部", ...tags], (t) => applyTag(t));
@@ -196,7 +233,6 @@ function buildFilters(container, list, handler) {
     container.appendChild(btn);
   });
 }
-
 function applyYear(year) {
   currentYear = year;
   currentPage = 1;
@@ -205,7 +241,6 @@ function applyYear(year) {
   });
   refreshFilter();
 }
-
 function applyTag(tag) {
   currentTag = tag;
   currentPage = 1;
@@ -214,7 +249,6 @@ function applyTag(tag) {
   });
   refreshFilter();
 }
-
 // 统一计算 filteredItems（同时考虑年份 & 标签）
 function refreshFilter() {
   filteredItems = galleryItems.filter(i => {
@@ -226,7 +260,6 @@ function refreshFilter() {
   currentIndex = 0;
   renderPage();
 }
-
 function renderPage() {
   const grid = document.getElementById("gallery-grid");
   const pageInfo = document.getElementById("page-info");
