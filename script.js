@@ -351,33 +351,3 @@ document.addEventListener("keydown", e => {
     if (e.key === "Escape") lightbox.style.display = "none";
   }
 });
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const el = document.getElementById("welcome-typing");
-  if (!el) return;
-
-  // 要打出来的文字（改这里）
-  const text = "welcome~ 这里是我屯日记与涂鸦的小站";
-
-  // 如果用户开启“减少动效”，直接展示全文
-  const preferReduce = window.matchMedia &&
-                       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (preferReduce) {
-    el.textContent = text;
-    return;
-  }
-
-  // 打字参数
-  const TYPE_SPEED = 45;   // 每个字符的间隔（毫秒）
-  const START_DELAY = 300; // 开始前的停顿（毫秒）
-
-  // 逐字打
-  let i = 0;
-  setTimeout(function tick() {
-    el.textContent = text.slice(0, i++);
-    if (i <= text.length) {
-      setTimeout(tick, TYPE_SPEED);
-    }
-  }, START_DELAY);
-});
-</script>
