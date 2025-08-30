@@ -1,0 +1,33 @@
+/* 浮动小播放器 */
+#player-root{
+  position:fixed; right:16px; bottom:16px; z-index:9999;
+  font-family:inherit;
+}
+.player-box{
+  display:flex; align-items:center; gap:8px;
+  background:#fff; border:1px solid #e5e5e5; border-radius:999px;
+  box-shadow:0 4px 18px rgba(0,0,0,.12);
+  padding:8px 10px;
+}
+.player-btn{
+  width:32px; height:32px; border:1px solid #ddd; border-radius:50%;
+  display:grid; place-items:center; cursor:pointer; background:#fff;
+}
+.player-btn:hover{ border-color:var(--main-color, #8c84d9); }
+.player-icon{ font-size:16px; line-height:1; }
+
+.player-title{
+  max-width:180px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  font-size:14px; color:#333;
+}
+
+.player-vol{
+  display:flex; align-items:center; gap:6px;
+  padding-left:4px; border-left:1px solid #eee;
+}
+.player-vol input[type="range"]{ width:100px; }
+
+@media (max-width:520px){
+  .player-title{ display:none; }
+  .player-vol input[type="range"]{ width:70px; }
+}
