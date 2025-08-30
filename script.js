@@ -351,34 +351,3 @@ document.addEventListener("keydown", e => {
     if (e.key === "Escape") lightbox.style.display = "none";
   }
 });
-
-/* ===== 首页打字机（只在 index 上、只认 #welcome-line） ===== */
-(function () {
-  const TEXT  = "welcome~ 这里是我屯日记与涂鸦的小站"; // 想改文案改这里
-  const SPEED = 45;    // 每字毫秒
-  const DELAY = 300;   // 开始前延时
-
-  function run() {
-    // 仅当 index 页面且有容器时才执行
-    const line   = document.getElementById("welcome-line");
-    const textEl = document.getElementById("welcome-text");
-    if (!line || !textEl) return;
-
-    // 减少动效：直接显示
-    const reduce = window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) { textEl.textContent = TEXT; return; }
-
-    let i = 0;
-    setTimeout(function tick(){
-      textEl.textContent = TEXT.slice(0, i++);
-      if (i <= TEXT.length) setTimeout(tick, SPEED);
-    }, DELAY);
-  }
-
-  if (document.readyState === "loading")
-    document.addEventListener("DOMContentLoaded", run);
-  else
-    run();
-})();
-
