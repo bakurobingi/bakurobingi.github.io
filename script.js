@@ -351,3 +351,46 @@ document.addEventListener("keydown", e => {
     if (e.key === "Escape") lightbox.style.display = "none";
   }
 });
+
+/* ===== 首页打字机（欢迎语） ===== */
+(function () {
+  // 目标文字（改这里）
+  const TEXT = "welcome~ 这里是我屯日记与涂鸦的小站";
+
+  // 找到/创建 #welcome-typing
+  function ensureTarget() {
+    let el = document.getElementById("welcome-typing");
+    if (!el) {
+      // 如果你忘了在 index.html 放 <span id="welcome-typing"></span>，那我来补一个
+      const p = document.querySelector(".welcome") || document.body;
+      el = document.createElement("span");
+      el.id = "welcome-typing";
+      p.appendChild(el);
+    }
+    return el;
+  }
+
+  function run() {
+    const el = ensureTarget();
+    // 用户开启“减少动效”时，直接显示完整文字
+    const preferReduce = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (preferReduce) { el.textContent = TEXT; return; }
+
+    // 逐字打
+    const TYPE_SPEED = 45;   // 每字间隔（ms）
+    const START_DELAY = 300; // 开始前停顿（ms）
+    let i = 0;
+    setTimeout(function tick() {
+      el.textContent = TEXT.slice(0, i++);
+      if (i <= TEXT.length) setTimeout(tick, TYPE_SPEED);
+    }, START_DELAY);
+  }
+
+  // script.js 通常是 defer 的；保险起见两个事件都挂
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run);
+  } else {
+    run();
+  }
+})();
