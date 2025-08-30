@@ -1,74 +1,66 @@
-<!DOCTYPE html>
-<html lang="zh">
+<!doctype html>
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>Gallery</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="favicon.png" type="image/png">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="stylesheet" href="assets/player.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gallery | bakurobingi</title>
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="style.css?v=18" />
 </head>
 <body>
 
-  <div class="background"></div>
-
-  <div class="back-home">
-    <a href="index.html">← 返回主页</a>
-  </div>
-
-  <div class="container gallery-container">
+  <!-- 顶部标题 -->
+  <header class="page-header">
     <h1>🎨 Gallery</h1>
+    <a class="back-home" href="index.html">返回主页</a>
+  </header>
 
-    <!-- 筛选条（自动生成年份按钮） -->
-    <div id="filter-bar" class="filter-bar">
-      <!-- JS 会自动插入 “全部”、“2025”、“2024”... -->
-    </div>
+  <main class="container">
+    <!-- 年份筛选 -->
+    <section>
+      <div id="year-list" class="chip-wrap" aria-label="年份筛选">
+        <!-- 由 script.js 渲染 -->
+      </div>
+    </section>
 
-    <!-- 缩略图网格（自动渲染） -->
-    <div id="gallery-grid" class="gallery-grid"></div>
+    <!-- 标签筛选（注意：这里只渲染一排按钮，不要分页按钮） -->
+    <section>
+      <div id="tag-list" class="chip-wrap" aria-label="标签筛选">
+        <!-- 由 script.js 渲染 -->
+      </div>
+    </section>
 
-    <!-- 分页控件 -->
-    <div id="pagination" class="pagination">
-      <button id="prev-page" class="page-btn">上一页</button>
-      <span id="page-info" class="page-info"></span>
-      <button id="next-page" class="page-btn">下一页</button>
-    </div>
-  </div>
+    <!-- 图片网格 -->
+    <section>
+      <div id="gallery-grid" class="grid">
+        <!-- 由 script.js 渲染 -->
+      </div>
+    </section>
 
-  <!-- Lightbox：带左右翻页与标题 -->
-  <div id="lightbox" class="lightbox">
-    <button class="lightbox-btn prev" onclick="prevImage()">←</button>
-    <img id="lightbox-img" src="" alt="">
-    <button class="lightbox-btn next" onclick="nextImage()">→</button>
-    <p id="lightbox-caption"></p>
-  </div>
+    <!-- 唯一的分页控件（给图片用） -->
+    <nav id="gallery-pagination" class="pager" aria-label="分页">
+      <button id="prev-page" class="btn" type="button">上一页</button>
+      <span id="page-info" class="page-info">第 1 / 1 页 • 共 0 张</span>
+      <button id="next-page" class="btn" type="button">下一页</button>
+    </nav>
+  </main>
 
-  <script src="script.js"></script>
-<!-- 年份筛选 -->
-<div id="year-bar" class="filter-bar"></div>
-<!-- 标签筛选（新增） -->
-<div id="tag-bar" class="filter-bar"></div>
+  <!-- 页脚（可选） -->
+  <footer class="site-footer">
+    <p>
+      <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">
+        <img alt="CC BY-NC-SA 4.0" style="border-width:0;height:22px;vertical-align:middle;"
+             src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png" />
+      </a><br>
+      本站内容采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">CC BY-NC-SA 4.0</a> 协议共享
+    </p>
+  </footer>
 
-<div id="gallery-grid" class="gallery-grid"></div>
+  <!-- 你站里的播放器（有的话） -->
+  <link rel="stylesheet" href="assets/player.css?v=2">
+  <script src="assets/player.js?v=2" defer></script>
 
-<!-- 你的 lightbox 保持不变 -->
-  <script src="assets/player.js" defer></script>
+  <!-- 统一逻辑：加载 galleryList.json 并渲染（只保留一套分页） -->
+  <script src="script.js?v=38" defer></script>
 </body>
 </html>
-<footer class="site-footer">
-  <p>
-    <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">
-      <img alt="知识共享许可协议" style="border-width:0;height:22px;vertical-align:middle;" 
-           src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png" />
-    </a>
-    <br>
-    本站内容采用 
-    <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">
-      CC BY-NC-SA 4.0
-    </a> 协议共享
-    <br>
-    © 2025 bakurobingi
-  </p>
-</footer>
