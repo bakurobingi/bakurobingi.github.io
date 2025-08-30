@@ -202,7 +202,7 @@ let currentYear = "全部";   // 年份筛选
 let currentTag  = "全部";   // 标签筛选
 
 let currentPage = 1;
-const PAGE_SIZE = 18;
+const PAGE_SIZE = 20;
 
 function initGallery() {
   const grid = document.getElementById("gallery-grid");
