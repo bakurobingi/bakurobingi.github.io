@@ -247,15 +247,11 @@ p, li, a { font-size: inherit; }
 .diary-content .diary-meta{ font-size:13px; color:#888; margin-top:4px; }
 
 /* 打字机：真实光标元素 */
-.welcome { text-align:center; } /* 可选，看你现在的排版 */
 #welcome-line { white-space: pre-wrap; }
 .welcome-caret {
-  display: inline-block;
-  margin-left: 2px;
-  color: var(--main-color, #8c84d9);
+  display:inline-block; margin-left:2px;
+  color:var(--main-color,#8c84d9);
   animation: caret-blink 1s steps(1) infinite;
 }
 @keyframes caret-blink { 0%,50%{opacity:1} 50.01%,100%{opacity:0} }
-@media (prefers-reduced-motion: reduce){
-  .welcome-caret { animation: none; }
-}
+@media (prefers-reduced-motion: reduce){ .welcome-caret{ animation:none; } }

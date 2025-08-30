@@ -352,24 +352,23 @@ document.addEventListener("keydown", e => {
   }
 });
 
-/* ===== 首页打字机（锚定 id，避免跑位） ===== */
+/* ===== 首页打字机（只在 index 上、只认 #welcome-line） ===== */
 (function () {
-  const TEXT = "welcome~ 这里是我屯日记与涂鸦的小站";  // 想改文案改这里
-  const SPEED = 45;   // 每字毫秒
-  const DELAY = 300;  // 开始前延时（毫秒）
+  const TEXT  = "welcome~ 这里是我屯日记与涂鸦的小站"; // 想改文案改这里
+  const SPEED = 45;    // 每字毫秒
+  const DELAY = 300;   // 开始前延时
 
   function run() {
-    const line  = document.getElementById("welcome-line"); // 只认这个容器
+    // 仅当 index 页面且有容器时才执行
+    const line   = document.getElementById("welcome-line");
     const textEl = document.getElementById("welcome-text");
-    const caret = document.querySelector("#welcome-line .welcome-caret");
-    if (!line || !textEl || !caret) return; // 不是首页就不跑
+    if (!line || !textEl) return;
 
     // 减少动效：直接显示
-    const preferReduce = window.matchMedia &&
+    const reduce = window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (preferReduce) { textEl.textContent = TEXT; return; }
+    if (reduce) { textEl.textContent = TEXT; return; }
 
-    // 逐字打
     let i = 0;
     setTimeout(function tick(){
       textEl.textContent = TEXT.slice(0, i++);
@@ -377,9 +376,9 @@ document.addEventListener("keydown", e => {
     }, DELAY);
   }
 
-  if (document.readyState === "loading") {
+  if (document.readyState === "loading")
     document.addEventListener("DOMContentLoaded", run);
-  } else {
+  else
     run();
-  }
 })();
+
