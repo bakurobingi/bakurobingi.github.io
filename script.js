@@ -352,42 +352,49 @@ document.addEventListener("keydown", e => {
   }
 });
 
-/* ===== 首页打字机（欢迎语） ===== */
+/* ===== 首页打字机（稳健版，不用伪元素） ===== */
 (function () {
-  // 目标文字（改这里）
+  // 要显示的文本（改这里）
   const TEXT = "welcome~ 这里是我屯日记与涂鸦的小站";
 
-  // 找到/创建 #welcome-typing
-  function ensureTarget() {
-    let el = document.getElementById("welcome-typing");
-    if (!el) {
-      // 如果你忘了在 index.html 放 <span id="welcome-typing"></span>，那我来补一个
-      const p = document.querySelector(".welcome") || document.body;
-      el = document.createElement("span");
-      el.id = "welcome-typing";
-      p.appendChild(el);
-    }
-    return el;
-  }
-
   function run() {
-    const el = ensureTarget();
-    // 用户开启“减少动效”时，直接显示完整文字
+    // 优先用你已有的 <p class="welcome">；没有就放到 body
+    const host = document.querySelector(".welcome") || document.body;
+    if (!host) return;
+
+    // 清理旧内容（避免多次注入）
+    host.querySelectorAll(".welcome-typing, #welcome-typing, .welcome-caret").forEach(n => n.remove());
+
+    // 结构：文字 + 光标
+    const wrap  = document.createElement("span");
+    wrap.className = "welcome-typing";
+    const textEl = document.createElement("span");
+    textEl.id = "welcome-typing";              // 给你留这个 id，便于以后定位
+    const caret  = document.createElement("span");
+    caret.className = "welcome-caret";
+    caret.textContent = "│";
+    wrap.append(textEl, caret);
+    host.appendChild(wrap);
+
+    // 减少动效：直接显示
     const preferReduce = window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (preferReduce) { el.textContent = TEXT; return; }
+    if (preferReduce) {
+      textEl.textContent = TEXT;
+      return;
+    }
 
     // 逐字打
-    const TYPE_SPEED = 45;   // 每字间隔（ms）
-    const START_DELAY = 300; // 开始前停顿（ms）
+    const SPEED = 45;   // 每字毫秒
+    const DELAY = 300;  // 开始延时
     let i = 0;
-    setTimeout(function tick() {
-      el.textContent = TEXT.slice(0, i++);
-      if (i <= TEXT.length) setTimeout(tick, TYPE_SPEED);
-    }, START_DELAY);
+    setTimeout(function tick(){
+      textEl.textContent = TEXT.slice(0, i++);
+      if (i <= TEXT.length) setTimeout(tick, SPEED);
+    }, DELAY);
   }
 
-  // script.js 通常是 defer 的；保险起见两个事件都挂
+  // 保险：两种时机都跑
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", run);
   } else {

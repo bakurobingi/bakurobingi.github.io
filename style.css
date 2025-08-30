@@ -246,20 +246,24 @@ p, li, a { font-size: inherit; }
 .diary-content .diary-title{ margin:0; }
 .diary-content .diary-meta{ font-size:13px; color:#888; margin-top:4px; }
 
-/* 打字机光标 */
-#welcome-typing {
+/* 打字机：真实光标元素 */
+.welcome-typing {
   position: relative;
   white-space: pre-wrap;
 }
-#welcome-typing::after {
-  content: "│";
+.welcome-caret {
   display: inline-block;
   margin-left: 2px;
   color: var(--main-color, #8c84d9);
   animation: caret-blink 1s steps(1) infinite;
 }
-@keyframes caret-blink { 0%,50%{opacity:1} 50.01%,100%{opacity:0} }
+
+@keyframes caret-blink {
+  0%,50% { opacity: 1; }
+  50.01%,100% { opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce){
-  #welcome-typing::after { content: ""; animation: none; }
+  .welcome-caret { animation: none; }
 }
 
