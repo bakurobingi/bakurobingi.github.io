@@ -99,6 +99,18 @@ p,li,a { font-size:inherit;}
 .filter-btn.active{
   background:var(--light-color);border-color:var(--main-color);color:var(--main-color);font-weight:700;
 }
+.chip-wrap{
+  display:flex; flex-wrap:wrap; gap:12px;
+  justify-content:center; 
+  max-height: none;          /* 想收起时再加 max-height */
+  overflow-x:auto;
+}
+.chip{
+  padding:8px 14px; border:1px solid #ddd; border-radius:10px; background:#fff;
+  cursor:pointer;
+}
+.chip.active{ border-color: var(--main-color); color: var(--main-color); }
+
 
 /* —— 分页 —— */
 .pagination{
