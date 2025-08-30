@@ -245,3 +245,29 @@ p, li, a { font-size: inherit; }
 }
 .diary-content .diary-title{ margin:0; }
 .diary-content .diary-meta{ font-size:13px; color:#888; margin-top:4px; }
+
+/* 打字机效果 */
+#welcome-typing {
+  position: relative;
+  white-space: pre-wrap; /* 支持中英文/换行 */
+}
+
+/* 闪烁的光标 */
+#welcome-typing::after {
+  content: "│";
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--main-color, #8c84d9);
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+@keyframes caret-blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+/* 用户启用“减少动效”时：直接显示，不打字不闪烁 */
+@media (prefers-reduced-motion: reduce) {
+  #welcome-typing::after { content: ""; animation: none; }
+}
+
