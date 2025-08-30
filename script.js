@@ -352,41 +352,24 @@ document.addEventListener("keydown", e => {
   }
 });
 
-/* ===== 首页打字机（稳健版，不用伪元素） ===== */
+/* ===== 首页打字机（锚定 id，避免跑位） ===== */
 (function () {
-  // 要显示的文本（改这里）
-  const TEXT = "welcome~ 这里是我屯日记与涂鸦的小站";
+  const TEXT = "welcome~ 这里是我屯日记与涂鸦的小站";  // 想改文案改这里
+  const SPEED = 45;   // 每字毫秒
+  const DELAY = 300;  // 开始前延时（毫秒）
 
   function run() {
-    // 优先用你已有的 <p class="welcome">；没有就放到 body
-    const host = document.querySelector(".welcome") || document.body;
-    if (!host) return;
-
-    // 清理旧内容（避免多次注入）
-    host.querySelectorAll(".welcome-typing, #welcome-typing, .welcome-caret").forEach(n => n.remove());
-
-    // 结构：文字 + 光标
-    const wrap  = document.createElement("span");
-    wrap.className = "welcome-typing";
-    const textEl = document.createElement("span");
-    textEl.id = "welcome-typing";              // 给你留这个 id，便于以后定位
-    const caret  = document.createElement("span");
-    caret.className = "welcome-caret";
-    caret.textContent = "│";
-    wrap.append(textEl, caret);
-    host.appendChild(wrap);
+    const line  = document.getElementById("welcome-line"); // 只认这个容器
+    const textEl = document.getElementById("welcome-text");
+    const caret = document.querySelector("#welcome-line .welcome-caret");
+    if (!line || !textEl || !caret) return; // 不是首页就不跑
 
     // 减少动效：直接显示
     const preferReduce = window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (preferReduce) {
-      textEl.textContent = TEXT;
-      return;
-    }
+    if (preferReduce) { textEl.textContent = TEXT; return; }
 
     // 逐字打
-    const SPEED = 45;   // 每字毫秒
-    const DELAY = 300;  // 开始延时
     let i = 0;
     setTimeout(function tick(){
       textEl.textContent = TEXT.slice(0, i++);
@@ -394,7 +377,6 @@ document.addEventListener("keydown", e => {
     }, DELAY);
   }
 
-  // 保险：两种时机都跑
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", run);
   } else {
