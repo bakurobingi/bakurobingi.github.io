@@ -24,21 +24,23 @@ function safeFetchJSON(url, onOK, mountId) {
 }
 
 /* =========================================================
- * 日记：按年份分组 + 可折叠/展开 + 记忆折叠状态
+ * 日记：按年份分组 + 可折叠 + 左侧显示日期 + 正文头部显示标题/日期
  * 需要：#diary-list（左侧）、#diary-content（右侧）
- *      assets/diaryList.json 形如：
- *      { "2024-03-31": "2024-03-31.html", "2023-12-31": "2023-12-31.html" }
+ *      assets/diaryList.json （推荐数组版）
+ *        [
+ *          {"title":"病中画的","date":"2024-01-18","link":"2024-01-18.html"},
+ *          ...
+ *        ]
  *      片段放在 assets/diary/ 下
  * =======================================================*/
 function initDiary() {
   const listWrap = document.getElementById("diary-list");
   const contentEl = document.getElementById("diary-content");
-  if (!listWrap || !contentEl) return;
+  if (!listWrap || !contentEl) return; // 不在日记页
 
   safeFetchJSON("assets/diaryList.json", (raw) => {
-    // 兼容：如果还是旧的“映射对象”也能自动转成数组
+    // 兼容旧map：{ "2024-12-31 标题": "2024-12-31.html", ... }
     let items = Array.isArray(raw) ? raw : Object.entries(raw).map(([title, link]) => {
-      // 尝试从 link 或 title 里提取 YYYY-MM-DD
       const mLink = /(\d{4})-(\d{2})-(\d{2})/.exec(link);
       const mTitl = /(\d{4})(?:[-/年](\d{1,2})[-/月](\d{1,2}))?/.exec(title);
       const date = mLink ? `${mLink[1]}-${mLink[2]}-${mLink[3]}`
@@ -47,17 +49,16 @@ function initDiary() {
       return { title, date, link };
     });
 
-    // 工具函数
     const toTime = s => {
       const m = /^(\d{4})(?:-(\d{2})-(\d{2}))?/.exec(s || "");
       return m ? new Date(+m[1], (m[2]||1)-1, m[3]||1).getTime() : -Infinity;
     };
     const yearOf = s => (s.match(/^(\d{4})/) || [,"其它"])[1];
 
-    // 排序：按日期倒序（新→旧）
+    // 全量按日期倒序（新→旧）
     items.sort((a,b) => toTime(b.date) - toTime(a.date) || (b.title||"").localeCompare(a.title||"", "zh"));
 
-    // 分组：{ year -> [items...] }；同一年内仍按日期倒序
+    // 分组：{ year -> [items...] }；组内倒序
     const groups = new Map();
     items.forEach(it => {
       const y = String(yearOf(it.date));
@@ -72,7 +73,7 @@ function initDiary() {
     // 渲染
     listWrap.innerHTML = "";
     const years = Array.from(groups.keys()).sort((a,b) => b - a);
-    let firstFileToLoad = null;
+    let firstEntryToLoad = null;
 
     years.forEach((y, yi) => {
       const arr = groups.get(y);
@@ -80,6 +81,7 @@ function initDiary() {
       const group = document.createElement("div");
       group.className = "year-group" + (collapsed.has(y) ? " collapsed" : "");
 
+      // 年份按钮（可折叠）
       const btn = document.createElement("button");
       btn.className = "year-toggle";
       btn.type = "button";
@@ -95,25 +97,31 @@ function initDiary() {
       };
       group.appendChild(btn);
 
+      // —— 年内条目列表：标题 + 日期（小字） —— //
       const ul = document.createElement("ul");
       ul.className = "year-list";
 
       arr.forEach((it, idx) => {
         const li = document.createElement("li");
         const a  = document.createElement("a");
+
+        const title = it.title || it.date;
+        a.innerHTML = `<strong>${title}</strong><small class="diary-date">${it.date || ""}</small>`;
         a.href = "javascript:void(0)";
-        a.textContent = it.title || it.date;
+
         a.onclick = () => {
           listWrap.querySelectorAll("a.active").forEach(x => x.classList.remove("active"));
           a.classList.add("active");
-          loadDiary(it.link); // 片段在 assets/diary/ 下
+          loadDiaryEntry(it);  // 传整条（含 title/date/link）
         };
+
         li.appendChild(a);
         ul.appendChild(li);
 
-        if (yi === 0 && idx === 0) { // 默认加载最新年份的第一篇
+        // 默认加载：最新年份的第一篇
+        if (yi === 0 && idx === 0) {
           a.classList.add("active");
-          firstFileToLoad = it.link;
+          firstEntryToLoad = it;
         }
       });
 
@@ -121,41 +129,53 @@ function initDiary() {
       listWrap.appendChild(group);
     });
 
-    if (firstFileToLoad) loadDiary(firstFileToLoad);
+    if (firstEntryToLoad) loadDiaryEntry(firstEntryToLoad);
     else contentEl.innerHTML = "<p>暂无日记。</p>";
   }, "diary-list");
 }
 
+// 兼容旧调用：保留按文件名加载
 function loadDiary(filename) {
-  const content = document.getElementById("diary-content");
-  if (!content) return;
+  const entry = { title: "", date: "", link: filename };
+  loadDiaryEntry(entry);
+}
 
-  fetch(`assets/diary/${filename}`)
+// 新：按条目加载（会在正文顶部插入标题/日期）
+function loadDiaryEntry(entry) {
+  const { title, date, link } = entry || {};
+  const content = document.getElementById("diary-content");
+  if (!content || !link) return;
+
+  fetch(`assets/diary/${link}`)
     .then(res => { if (!res.ok) throw new Error("not found"); return res.text(); })
     .then(html => {
-      // 注入
+      // 注入正文
       content.innerHTML = html;
+
       const scope = content;
 
-      // 1) 清理：移除所有内联 style，避免污染全站
+      // —— 正文顶部加标题 + 日期头部区 —— //
+      const header = document.createElement("div");
+      header.className = "diary-header";
+      header.innerHTML = `
+        <h2 class="diary-title">${title || date || ""}</h2>
+        ${date ? `<div class="diary-meta">${date}</div>` : ""}
+      `;
+      content.prepend(header);
+
+      // —— 清理污染 & 统一风格 —— //
       scope.querySelectorAll("[style]").forEach(el => el.removeAttribute("style"));
-      // 2) 删除 <font>（保留内容）
       scope.querySelectorAll("font").forEach(el => {
         const p = el.parentNode;
         while (el.firstChild) p.insertBefore(el.firstChild, el);
         p.removeChild(el);
       });
-      // 3) H1 -> H2
       scope.querySelectorAll("h1").forEach(h1 => {
         const h2 = document.createElement("h2");
         h2.innerHTML = h1.innerHTML;
         h1.replaceWith(h2);
       });
-      // 4) 外链新窗 + 安全
-      scope.querySelectorAll("a[href]").forEach(a => {
-        a.target = "_blank"; a.rel = "noopener noreferrer";
-      });
-      // 5) 破图兜底
+      scope.querySelectorAll("a[href]").forEach(a => { a.target = "_blank"; a.rel = "noopener noreferrer"; });
       scope.querySelectorAll("img").forEach(img => {
         if (!img.hasAttribute("alt")) img.alt = "";
         img.addEventListener("error", () => { img.style.display = "none"; });
@@ -168,7 +188,11 @@ function loadDiary(filename) {
 }
 
 /* =========================================================
- * 画廊（保持你原来的功能）：年份 + 标签 + 分页 + Lightbox
+ * 画廊：年份 + 标签 + 分页 + Lightbox
+ * 需要：#year-bar  #tag-bar  #gallery-grid  #pagination
+ *       #prev-page #next-page #page-info
+ *       #lightbox  #lightbox-img #lightbox-caption
+ *       数据：assets/galleryList.json
  * =======================================================*/
 let galleryItems = [];      // 全量
 let filteredItems = [];     // 筛选后
