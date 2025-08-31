@@ -3,7 +3,7 @@ from PIL import Image
 
 src_folder = "gallery_src"
 dst_folder = "gallery_thumbs"
-size = (100, 100)
+size = (150, 150)
 
 os.makedirs(dst_folder, exist_ok=True)
 print("📸 开始裁剪缩略图（输出 JPG，透明铺白底）...\n")
