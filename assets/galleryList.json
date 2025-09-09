@@ -33,11 +33,11 @@
   },
   {
     "title": "",
-    "thumb": "assets/gallery1-thumb.jpg",
-    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/blog%E7%94%A8%E5%9B%BE/0513.jpg",
-    "desc": "20250513",
+    "thumb": "assets/gallery4-thumb.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/%E5%8D%9A%E5%AE%A2%E6%8F%92%E5%9B%BE/%E6%8F%92%E7%94%BB4.jpg",
+    "desc": "稿",
     "year": 2025,
-    "tags": ["练习"]
+    "tags": ["稿件"]
   },
   {
     "title": "",
@@ -89,6 +89,14 @@
   },
   {
     "title": "",
+    "thumb": "assets/gallery1-thumb.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/blog%E7%94%A8%E5%9B%BE/0513.jpg",
+    "desc": "20250513",
+    "year": 2025,
+    "tags": ["练习"]
+  },
+  {
+    "title": "",
     "thumb": "assets/gallery2-thumb.jpg",
     "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/blog%E7%94%A8%E5%9B%BE/GuMjFF5bYAA9U15.jpg",
     "desc": "2025",
@@ -102,14 +110,6 @@
     "desc": "师姐",
     "year": 2025,
     "tags": ["练习"]
-  },
-  {
-    "title": "",
-    "thumb": "assets/gallery4-thumb.jpg",
-    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/%E5%8D%9A%E5%AE%A2%E6%8F%92%E5%9B%BE/%E6%8F%92%E7%94%BB4.jpg",
-    "desc": "稿",
-    "year": 2025,
-    "tags": ["稿件"]
   },
   {
     "title": "",
