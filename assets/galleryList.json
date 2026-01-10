@@ -1,6 +1,46 @@
 [
   {
     "title": "",
+    "thumb": "assets/i1U0Kpagjy.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/blog%E7%94%A8%E5%9B%BE/%E6%8F%92%E7%94%BB15.jpg",
+    "desc": "",
+    "year": 2026,
+    "tags": ["zzz","game"]
+  },
+  {
+    "title": "",
+    "thumb": "assets/gx8PKir4TV.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/blog%E7%94%A8%E5%9B%BE/Screenshot_20260108-120129.png",
+    "desc": "",
+    "year": 2026,
+    "tags": ["练习"]
+  },
+  {
+    "title": "",
+    "thumb": "assets/GfL0BjBumA.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/blog%E7%94%A8%E5%9B%BE/G9qvxOfbIAAMeED.jpg",
+    "desc": "",
+    "year": 2026,
+    "tags": ["zzz","game"]
+  },
+  {
+    "title": "",
+    "thumb": "assets/nH7cmvQXQE.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/blog%E7%94%A8%E5%9B%BE/%E6%8F%92%E7%94%BB10%20%282%29.jpg",
+    "desc": "",
+    "year": 2025,
+    "tags": ["zzz","game"]
+  },
+  {
+    "title": "",
+    "thumb": "assets/ur9qla0M2j.jpg",
+    "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/blog%E7%94%A8%E5%9B%BE/%E6%8F%92%E7%94%BB13%20%281%29.jpg",
+    "desc": "",
+    "year": 2025,
+    "tags": ["zzz","game"]
+  },
+  {
+    "title": "",
     "thumb": "assets/StKemBybqC.jpg",
     "full": "https://baku-1308169645.cos.ap-beijing.myqcloud.com/blog%E7%94%A8%E5%9B%BE/%E6%8F%92%E7%94%BB11.jpg",
     "desc": "",
